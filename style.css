@@ -35,11 +35,33 @@ body{
     display: flex;
     justify-content: space-between;
     padding: 1em;
+    position: relative;
+    
 }
 .task-done{
     text-decoration: line-through;
-}
-.task-done-background{
-    background-color: lightgray;
 
+
+}
+.btn-box{
+    display: flex;
+
+
+}
+.btn-box button{
+    margin: 0;
+    background-color: white;
+    border: none;
+    width: 5em;
+    height: 2em;
+    padding: 0;
+}
+.fa-check{
+    color: lime;
+}
+.fa-trash-alt{
+    color:red;
+}
+.task-tabs div{
+    cursor:pointer;
 }

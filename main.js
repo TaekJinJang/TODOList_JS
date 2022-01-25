@@ -10,9 +10,16 @@ let taskInput = document.getElementById("task-input");
 let btnAdd = document.getElementById("add");
 let taskList = [];
 let btnCheck = document.getElementById("check");
+let tabs = document.querySelectorAll(".task-tabs div");
+
 
 btnAdd.addEventListener("click", addTask);
 
+for (let i = 1; i < tabs.length; i++) {
+  tabs[i].addEventListener("click", function (event) {
+    filter(event);
+  });
+}
 
 function addTask() {
   let task = {
@@ -29,19 +36,28 @@ function render() {
   let resultHTML = "";
   for (let i = 0; i < taskList.length; i++) {
 if(taskList[i].isComplete==true) {
-  resultHTML += `<div class="task task-done-background">
+  resultHTML += `<div class="task task-done-bg text-center">
     <div class="task-done">${taskList[i].taskContent}</div>
-      <div>
-          <i class="fas fa-undo-alt" onclick="toggleComplete('${taskList[i].id}')"></i>
-          <i class="fas fa-trash-alt" onclick="toggleDelete('${taskList[i].id}')"></i>
-      </div>
+    <div class="btn-box">
+    <button onclick="toggleComplete('${taskList[i].id}')">
+    <i class="fas fa-undo-alt"></i>
+    </button>
+    <button onclick="toggleDelete('${taskList[i].id}')">
+    <i class="fas fa-trash-alt"></i>
+  </button>
+    </div>
+
   </div>`;
 }else {
   resultHTML += `<div class="task">
   <div>${taskList[i].taskContent}</div>
-    <div>
-        <i class="fas fa-check" onclick="toggleComplete('${taskList[i].id}')"></i>
-        <i class="fas fa-trash-alt" onclick="toggleDelete('${taskList[i].id}')"></i>
+    <div class="btn-box">
+    <button onclick="toggleComplete('${taskList[i].id}')">
+    <i class="fas fa-check"></i>
+    </button>
+    <button onclick="toggleDelete('${taskList[i].id}')">
+    <i class="fas fa-trash-alt"></i>
+  </button>
     </div>
   </div>`;
 }
@@ -66,16 +82,21 @@ function toggleComplete(id) {
   console.log(taskList);
 }
 
-function toggleDelete() {
+function toggleDelete(id) {
   console.log("삭제");
   for(let i=0;i<taskList.length;i++){
     if(taskList[i].id==id) {
-      taskList.removeChild(taskList.childNodes[i]);
+      taskList.splice(i,1)
+      console.log(taskList);
+      break;
     }
-    break;
   }
+  render();
 }
 
 function randomIDGenerate(){
   return '_' + Math.random().toString(36).substr(2, 9);
+}
+function filter(event){
+  console.log("클릭됌",event.target);
 }
