@@ -29,19 +29,19 @@ function render() {
   let resultHTML = "";
   for (let i = 0; i < taskList.length; i++) {
 if(taskList[i].isComplete==true) {
-  resultHTML += `<div class="task">
+  resultHTML += `<div class="task task-done-background">
     <div class="task-done">${taskList[i].taskContent}</div>
       <div>
-          <button onclick="toggleComplete('${taskList[i].id}')">Check</button>
-          <button onclick="toggleDelete()">Delete</button>
+          <i class="fas fa-undo-alt" onclick="toggleComplete('${taskList[i].id}')"></i>
+          <i class="fas fa-trash-alt" onclick="toggleDelete('${taskList[i].id}')"></i>
       </div>
   </div>`;
 }else {
   resultHTML += `<div class="task">
   <div>${taskList[i].taskContent}</div>
     <div>
-        <button onclick="toggleComplete('${taskList[i].id}')">Check</button>
-        <button onclick="toggleDelete()">Delete</button>
+        <i class="fas fa-check" onclick="toggleComplete('${taskList[i].id}')"></i>
+        <i class="fas fa-trash-alt" onclick="toggleDelete('${taskList[i].id}')"></i>
     </div>
   </div>`;
 }
@@ -68,6 +68,12 @@ function toggleComplete(id) {
 
 function toggleDelete() {
   console.log("삭제");
+  for(let i=0;i<taskList.length;i++){
+    if(taskList[i].id==id) {
+      taskList.removeChild(taskList.childNodes[i]);
+    }
+    break;
+  }
 }
 
 function randomIDGenerate(){
