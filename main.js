@@ -11,9 +11,15 @@ let btnAdd = document.getElementById("add");
 let taskList = [];
 let btnCheck = document.getElementById("check");
 let tabs = document.querySelectorAll(".task-tabs div");
-
+let mode = 'all'
+let filterList=[];
 
 btnAdd.addEventListener("click", addTask);
+taskInput.addEventListener("keyup", function (event){
+  if (event.keyCode === 13) {
+    addTask(event);
+  }
+});
 
 for (let i = 1; i < tabs.length; i++) {
   tabs[i].addEventListener("click", function (event) {
@@ -33,16 +39,26 @@ function addTask() {
 }
 
 function render() {
+  let list= [];
+  if(mode == "all"){
+    list = taskList;
+    console.log(list);
+  } else if(mode == "not-done" || mode == "done") {
+    list = filterList;
+  }
+
+
+
   let resultHTML = "";
-  for (let i = 0; i < taskList.length; i++) {
-if(taskList[i].isComplete==true) {
+  for (let i = 0; i < list.length; i++) {
+if(list[i].isComplete==true) {
   resultHTML += `<div class="task task-done-bg text-center">
-    <div class="task-done">${taskList[i].taskContent}</div>
+    <div class="task-done">${list[i].taskContent}</div>
     <div class="btn-box">
-    <button onclick="toggleComplete('${taskList[i].id}')">
+    <button onclick="toggleComplete('${list[i].id}')">
     <i class="fas fa-undo-alt"></i>
     </button>
-    <button onclick="toggleDelete('${taskList[i].id}')">
+    <button onclick="toggleDelete('${list[i].id}')">
     <i class="fas fa-trash-alt"></i>
   </button>
     </div>
@@ -50,12 +66,12 @@ if(taskList[i].isComplete==true) {
   </div>`;
 }else {
   resultHTML += `<div class="task">
-  <div>${taskList[i].taskContent}</div>
+  <div>${list[i].taskContent}</div>
     <div class="btn-box">
-    <button onclick="toggleComplete('${taskList[i].id}')">
+    <button onclick="toggleComplete('${list[i].id}')">
     <i class="fas fa-check"></i>
     </button>
-    <button onclick="toggleDelete('${taskList[i].id}')">
+    <button onclick="toggleDelete('${list[i].id}')">
     <i class="fas fa-trash-alt"></i>
   </button>
     </div>
@@ -79,10 +95,11 @@ function toggleComplete(id) {
     }
   }
   render();
-  console.log(taskList);
+
 }
 
 function toggleDelete(id) {
+
   console.log("삭제");
   for(let i=0;i<taskList.length;i++){
     if(taskList[i].id==id) {
@@ -90,13 +107,41 @@ function toggleDelete(id) {
       console.log(taskList);
       break;
     }
-  }
+  } 
+  
   render();
+  filter();
+
+
 }
 
 function randomIDGenerate(){
   return '_' + Math.random().toString(36).substr(2, 9);
 }
-function filter(event){
-  console.log("클릭됌",event.target);
+function filter(e){
+  if (e){
+  mode=e.target.id
+}
+  filterList=[];
+  if (mode == "all") {
+    render();
+  }else if( mode=="not-done") {
+    for(let i=0;i<taskList.length;i++){
+      if(taskList[i].isComplete == false){
+        filterList.push(taskList[i]);
+      }
+    }
+    render();
+  }else if (mode == "done") {
+    for(let i=0;i<taskList.length;i++){
+      if(taskList[i].isComplete == true){
+        filterList.push(taskList[i]);
+      }
+    }
+    render();
+ 
+  }
+
+  console.log(filterList);
+  
 }
